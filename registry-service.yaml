@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: eureka
+spec:
+  serviceName: "eureka"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eureka
+  template:
+    metadata:
+      labels:
+        app: eureka
+    spec:
+      containers:
+        - name: eureka
+          image: ayga/registry-app
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8761
+          env:
+            - name: SERVER_PORT
+              value: "8761"
+            - name: EUREKA_CLIENT_REGISTER_WITH_EUREKA
+              value: "false"
+            - name: EUREKA_CLIENT_FETCH_REGISTRY
+              value: "false"
+      imagePullSecrets:
+        - name: my-dockerhub-secret
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: registry-app
+  name: registry-app-nodeport
+spec:
+  type: NodePort
+  ports:
+    - name: registry-app-service-port
+      port: 8761
+      targetPort: 8761
+      nodePort: 30005 # You can specify a different nodePort if needed
+      protocol: TCP
+  selector:
+    app: registry-app
