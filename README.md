@@ -11,5 +11,3 @@ The Registry Microservice is a Spring Boot application designed to serve as a se
 - Service registration and discovery
 - Lightweight and scalable
 - Built on top of Spring Boot and the Eureka service registry
-# Registry-Microservice
-# Registry-Microservice
